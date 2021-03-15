@@ -30,8 +30,9 @@ public class GithubFileScrapingServiceImpl implements GithubFileScrapingService 
 	
 	@Override
 	public GithubProjectDTO searchAndScrapRepoFiles(String user, String name) throws RepositoryException {
-		
+
 		try {
+			
 			GithubProjectDTO project = null;
 			
 			//search the files in the project database
@@ -43,34 +44,21 @@ public class GithubFileScrapingServiceImpl implements GithubFileScrapingService 
 			//if the file already exists in the database and is updated, it returns
 			if (projectRecovered != null && projectRecovered.getLastCommit().equals(lastCommit)) {
 				
-				return groupByFileTipes(mapper.map(projectRecovered, GithubProjectDTO.class));
+				project = mapper.map(projectRecovered, GithubProjectDTO.class);
 				
 			}else {
-				try {
-					//search files into repository github
-					List<GithubFileDTO> listFiles = UnzipUtils.unzipFilesFromStream(getUrlGithubProjectZipFolderMaster(user, name), user, name, lastCommit);
 				
-					Long amountSize = listFiles.stream().collect(Collectors.summingLong(o -> o.getSize()));
-					Long amountLines = listFiles.stream().collect(Collectors.summingLong(o -> o.getAmountLines()));
-					
-					project = GithubProjectDTO.builder()
-										.userGithub(user)
-										.nameGithub(name)
-										.lastCommit(lastCommit)
-										.amountLines(String.valueOf(amountLines))
-										.amoutBytes(String.valueOf(amountSize))
-										.files(listFiles)
-									 .build();
+				//search files into repository github
+				List<GithubFileDTO> listFiles = UnzipUtils.unzipFilesFromStream(getUrlGithubProjectZipFolderMaster(user, name), user, name, lastCommit);
 				
-					if(projectRecovered != null)
-						delete(projectRecovered);
+				project = mountProjectDTO(user, name, lastCommit, listFiles);
+			
+				if(projectRecovered != null)
+					delete(projectRecovered);
+			
+				//save on database
+				saveWithDTO(project);					
 				
-					//save on database
-					save(project);
-					
-				} catch (Exception e) {
-					throw new RepositoryException("Error on unzip files!");
-				}
 			}
 			
 			return groupByFileTipes(project);
@@ -79,8 +67,21 @@ public class GithubFileScrapingServiceImpl implements GithubFileScrapingService 
 			throw new RepositoryException("Error fetching files in git or not found!");
 		}
 		
+	}
+	
+	private GithubProjectDTO mountProjectDTO(String user, String name, String lastCommit, List<GithubFileDTO> listFiles) {
 		
+		Long amountSize = listFiles.stream().collect(Collectors.summingLong(o -> o.getSize()));
+		Long amountLines = listFiles.stream().collect(Collectors.summingLong(o -> o.getAmountLines()));
 		
+		return GithubProjectDTO.builder()
+									.userGithub(user)
+									.nameGithub(name)
+									.lastCommit(lastCommit)
+									.amountLines(String.valueOf(amountLines))
+									.amoutBytes(String.valueOf(amountSize))
+									.files(listFiles)
+								 .build();
 	}
 	
 	private GithubProjectDTO groupByFileTipes(GithubProjectDTO project) {
@@ -113,7 +114,7 @@ public class GithubFileScrapingServiceImpl implements GithubFileScrapingService 
 	 
 	}
 	
-	private void save(GithubProjectDTO project) {
+	private void saveWithDTO(GithubProjectDTO project) {
 		//convert DTO to entity for save the project on database
 		GithubProject projectEntity = mapper.map(project, GithubProject.class);
 		
