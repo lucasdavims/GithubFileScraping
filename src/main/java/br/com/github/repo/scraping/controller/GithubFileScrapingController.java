@@ -12,6 +12,7 @@ import br.com.github.repo.scraping.exception.RepositoryException;
 import br.com.github.repo.scraping.service.GithubFileScrapingService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponses;
 
 import io.swagger.annotations.ApiResponse;
@@ -31,9 +32,11 @@ public class GithubFileScrapingController {
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
-	@GetMapping(value="/search")
-	public ResponseEntity<?> findByRepository(@RequestParam(name = "user") String user, @RequestParam(name = "name") String name) throws RepositoryException {
-		
+	@GetMapping(value = "/search")
+	public ResponseEntity<?> findByRepository(
+			@ApiParam(name = "user", type = "String", value = "User name from github", example = "lucasdavims", required = true) @RequestParam(name = "user") String user,
+			@ApiParam(name = "name", type = "String", value = "Repository name from github user", example = "GithubFileScraping", required = true) @RequestParam(name = "name") String name) throws RepositoryException {
+
 		GithubProjectDTO project = service.searchAndScrapRepoFiles(user, name);
 		
 		return ResponseEntity.ok().body(project);
