@@ -14,4 +14,8 @@ mvn clean install
 
 ## Endpoint example
 
-http://localhost:8080/githubFileInfoScraping/search?name=TAGPASSENGER&user=lucasdavims
+https://aqueous-earth-20623.herokuapp.com/githubFileInfoScraping/search?name=GithubFileScraping&user=lucasdavims
+
+## Documentation
+
+https://aqueous-earth-20623.herokuapp.com/swagger-ui.html#
