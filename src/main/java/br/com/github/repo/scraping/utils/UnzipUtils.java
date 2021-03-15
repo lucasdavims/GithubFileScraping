@@ -2,6 +2,7 @@ package br.com.github.repo.scraping.utils;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -58,7 +59,12 @@ public class UnzipUtils {
 	
 	private static Long countLines(ZipInputStream  zipIn) throws IOException {
 		
-		InputStream is = new ByteArrayInputStream(zipIn.readAllBytes());
+		InputStream is = new FilterInputStream(zipIn) {
+            @Override
+            public void close() throws IOException {
+                zipIn.closeEntry();
+            }
+        };
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is));		
 		
