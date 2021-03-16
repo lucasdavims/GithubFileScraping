@@ -24,6 +24,7 @@ public class GithubProjectDTO implements Serializable{
 	private String nameGithub;
 	private String amoutBytes;
 	private String amountLines;
+	
 	@JsonIgnore
 	private String lastCommit;
 	

@@ -13,6 +13,8 @@ import br.com.github.repo.scraping.exception.RepositoryException;
 
 public class HtmlUtils {
 
+	private static final String HREF = "href";
+	
 	public static String getLastCommitFromRepositoryWithURL(String url) throws RepositoryException, MalformedURLException, IOException{
 		try {
 			String html = getHtmlFromUrl(url);
@@ -37,7 +39,7 @@ public class HtmlUtils {
 				//if start of tag was found, reverse navigation to check attributes for this tag
 				String possibleAttr = Character.toString(html.charAt(index))+Character.toString(html.charAt(index+1))+Character.toString(html.charAt(index+2))+Character.toString(html.charAt(index+3))+"";
 				//check if attribute is href to commit link
-				if ("href".equals(possibleAttr)) {
+				if (HREF.equals(possibleAttr)) {
 					index +=6;
 					//collect all text link
 					while(index > 0) {

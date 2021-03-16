@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -40,13 +41,10 @@ public class UnzipUtils {
 		 //while files exist, mount the dto
 	    while ((entry = zipIn.getNextEntry()) != null) {
 	    	if(entry.getSize() > 0) {
-	    		
-	    		String[] path = entry.getName().split("/");
-		    	String[] file = path[path.length - 1].split("[.]");
-
+		    	
 		    	files.add(GithubFileDTO.builder()
 		    								.description(entry.getName())
-		    								.extension(file[file.length - 1])
+		    								.extension(getFileExtentions(entry.getName().split("/")))
 		    								.size(entry.getSize())
 		    								.amountLines(countLines(zipIn))
 		    						   .build());	
@@ -54,6 +52,18 @@ public class UnzipUtils {
 	    }
 		
 		return files;
+	}
+	
+	private static String getFileExtentions (String[] path) {
+
+		List<String> file = Arrays.asList(path[path.length - 1].split("[.]"));
+		
+		if (file.size() >= 2) {
+			return file.get(file.size() -1);
+		}else {
+			return " ";
+		}
+		
 	}
 	
 	private static Long countLines(ZipInputStream  zipIn) throws IOException {

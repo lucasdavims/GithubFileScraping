@@ -32,22 +32,21 @@ public class GithubFile implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id")
 	private Long id;
 	
-	@Column(name = "description")
+	@Column(name = "description", nullable = false)
 	private String description;
 	
-	@Column(name = "size")
+	@Column(name = "size", nullable = false)
 	private Long size;
 	
-	@Column(name = "amount_lines")
+	@Column(name = "amount_lines", nullable = false)
 	private Long amountLines;
 	
-	@Column(name = "extension")
+	@Column(name = "extension", nullable = false)
 	private String extension;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade={ CascadeType.ALL})
+	@ManyToOne(fetch = FetchType.LAZY,  optional = false, cascade={ CascadeType.ALL})
     @JoinColumn(name = "project_id")
     private GithubProject project;
 }

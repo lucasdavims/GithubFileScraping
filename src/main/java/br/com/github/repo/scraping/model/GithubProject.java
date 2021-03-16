@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -32,7 +33,6 @@ public class GithubProject  implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id")
 	private Long id;
 	
 	@Column(name = "user_github")
@@ -52,5 +52,10 @@ public class GithubProject  implements Serializable{
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "project", cascade={ CascadeType.ALL})
 	private List<GithubFile> files;
+	
+	@PrePersist
+	private void prePersist() {
+		files.forEach( c -> c.setProject(this));
+	}
 
 }

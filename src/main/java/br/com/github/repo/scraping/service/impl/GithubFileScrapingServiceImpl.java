@@ -91,6 +91,7 @@ public class GithubFileScrapingServiceImpl implements GithubFileScrapingService 
 		List<GithubFileGroupDTO> list = new ArrayList<>();
 		
 		filesGroups.forEach((key, value)-> {
+			
 			Long size = value.stream().collect(Collectors.summingLong(o -> o.getSize()));
 			Long amountLines = value.stream().collect(Collectors.summingLong(o -> o.getAmountLines()));
 			
@@ -117,11 +118,6 @@ public class GithubFileScrapingServiceImpl implements GithubFileScrapingService 
 	private void saveWithDTO(GithubProjectDTO project) {
 		//convert DTO to entity for save the project on database
 		GithubProject projectEntity = mapper.map(project, GithubProject.class);
-		
-		//set parent reference to persist
-		projectEntity.getFiles().stream().forEach(githubFile -> {
-			githubFile.setProject(projectEntity);
-		});
 		
 		projectRepository.save(projectEntity);
 	}

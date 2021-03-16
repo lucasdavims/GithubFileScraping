@@ -33,7 +33,7 @@ public class GithubFileScrapingController {
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
 	@GetMapping(value = "/search")
-	public ResponseEntity<?> findByRepository(
+	public ResponseEntity<GithubProjectDTO> findByRepository(
 			@ApiParam(name = "user", type = "String", value = "User name from github", example = "lucasdavims", required = true) @RequestParam(name = "user") String user,
 			@ApiParam(name = "name", type = "String", value = "Repository name from github user", example = "GithubFileScraping", required = true) @RequestParam(name = "name") String name) throws RepositoryException {
 
