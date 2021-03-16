@@ -35,19 +35,19 @@ public class GithubProject  implements Serializable{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@Column(name = "user_github")
+	@Column(name = "user_github", nullable = false)
 	private String userGithub;
 	
-	@Column(name = "name_github")
+	@Column(name = "name_github", nullable = false)
 	private String nameGithub;
 	
-	@Column(name = "last_commit")
+	@Column(name = "last_commit", nullable = false)
 	private String lastCommit;
 	
-	@Column(name = "amout_bytes")
+	@Column(name = "amout_bytes", nullable = false)
 	private String amoutBytes;
 	
-	@Column(name = "amount_lines")
+	@Column(name = "amount_lines", nullable = false)
 	private String amountLines;
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "project", cascade={ CascadeType.ALL})
