@@ -55,7 +55,7 @@ public class GithubProject  implements Serializable{
 	
 	@PrePersist
 	private void prePersist() {
-		files.forEach( c -> c.setProject(this));
+		files.forEach( f -> f.setProject(this));
 	}
 
 }

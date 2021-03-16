@@ -31,7 +31,7 @@ public class SwaggerConfig {
 		ApiInfo apiInfo = new ApiInfoBuilder()
 				.title("Challenge Github repository Trustly")
 				.description ("Develop an API that returns the total number of lines and the total number of bytes of all the files of a given public Github repository, grouped by file extension.")
-				.contact(new Contact("Lucas Davi Matias Siqueira", "", "eu@lucasdavi.com"))
+				.contact(new Contact("Lucas Davi Matias Siqueira", "linkedin:https://www.linkedin.com/in/lucas-davi/", "eu@lucasdavi.com"))
 				.version("1.0")
 		        .build();
 		return apiInfo;
